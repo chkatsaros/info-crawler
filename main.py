@@ -10,18 +10,21 @@ import time
               help='The domain you want to gather information about.')
 def harvest(domain):
     """Harvest and correlate information for penetration testing."""
-    theHarvesterProcess = subprocess.Popen(['/usr/bin/theHarvester', '-b', "all", '-d', domain, "-f", f"~/info-crawler-output/{domain}"])
+    harvester_process = subprocess.Popen(['/usr/bin/theHarvester', '-b', "all", '-d', domain, "-f", f"~/info-crawler-output/{domain}-harvester"])
+    emailharvester_process = subprocess.Popen(['/usr/bin/emailharvester', '-d', domain, "-s", f"~/info-crawler-output/{domain}-emailharvester"])
     try:
-        theHarvesterProcess.wait()
+        harvester_process.wait()
+        emailharvester_process.wait()
     except KeyboardInterrupt:
-        theHarvesterProcess.kill()
+        harvester_process.kill()
+        emailharvester_process.kill()
 
-    h8mailProcess = subprocess.Popen(
-        ['h8mail', '-t', domain, '--loose'])
-    try:
-        h8mailProcess.wait()
-    except KeyboardInterrupt:
-        h8mailProcess.kill()
+    # h8mailProcess = subprocess.Popen(
+    #     ['h8mail', '-t', domain, '--loose'])
+    # try:
+    #     h8mailProcess.wait()
+    # except KeyboardInterrupt:
+    #     h8mailProcess.kill()
 
 # TODO: add --path click.option for the output
 
