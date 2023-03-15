@@ -10,10 +10,10 @@ import time
               help='The domain you want to gather information about.')
 def harvest(domain):
     """Harvest and correlate information for penetration testing."""
-    harvester_process = subprocess.Popen(['/usr/bin/theHarvester', '-b', "all", '-d', domain, "-f", f"~/info-crawler-output/{domain}-harvester"])
-    emailharvester_process = subprocess.Popen(['/usr/bin/emailharvester', '-d', domain, "-s", f"~/info-crawler-output/{domain}-emailharvester"])
     try:
+        harvester_process = subprocess.Popen(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", f"~/info-crawler-output/{domain}-harvester"])
         harvester_process.wait()
+        emailharvester_process = subprocess.Popen(['python3','../tools/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", f"~/info-crawler-output/{domain}-emailharvester"])
         emailharvester_process.wait()
     except KeyboardInterrupt:
         harvester_process.kill()
@@ -26,9 +26,12 @@ def harvest(domain):
     # except KeyboardInterrupt:
     #     h8mailProcess.kill()
 
-# TODO: add --path click.option for the output
+# TODO: add --output-path -o click.option for the output
 
-# TODO: add --type click.option for the output type(s)
+# TODO: add --type -tclick.option for the output type(s)
+
+# TODO: add --tools-path -p click.option for the tools path
+
 
 if __name__ == '__main__':
     logo = pyfiglet.figlet_format("InfoCrawler", font="big")
