@@ -1,9 +1,21 @@
 import click
 import subprocess
 import pyfiglet
-import os
 import time
+from pathlib import Path
 
+def loader(flag):
+    animation_sequence = "|/-\\"
+    idx = 0
+    while flag:
+        print(animation_sequence[idx % len(animation_sequence)], end="\r")
+        idx += 1
+        time.sleep(0.1)
+
+        if idx == len(animation_sequence):
+            idx = 0
+    # Verify the change in idx variable
+    print(f'   idx: {idx}', end='\r')
 
 @click.command()
 @click.option('-d', '--domain', prompt='Domain',
@@ -11,10 +23,12 @@ import time
 def harvest(domain):
     """Harvest and correlate information for penetration testing."""
     try:
-        harvester_process = subprocess.Popen(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", f"~/info-crawler-output/{domain}-harvester"])
+        print("Gathering information from theHarvester...")
+        harvester_process = subprocess.Popen(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", "./th"], stdout=subprocess.DEVNULL)
         harvester_process.wait()
-        emailharvester_process = subprocess.Popen(['python3','../tools/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", f"~/info-crawler-output/{domain}-emailharvester"])
-        emailharvester_process.wait()
+        print("Gathering information from EmailHarvester...")
+        emailharvester_process = subprocess.Popen(['python3.8','../tools/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", "./eh"], stdout=subprocess.DEVNULL)
+        emailharvester_process.wait()  
     except KeyboardInterrupt:
         harvester_process.kill()
         emailharvester_process.kill()
@@ -37,12 +51,9 @@ if __name__ == '__main__':
     logo = pyfiglet.figlet_format("InfoCrawler", font="big")
     print(logo)
 
-    time.sleep(3)
-
-    output_dir = os.path.expanduser('~/info-crawler-output')
-    if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
-    # TODO: add more tools to correlate
+    path = Path.home().joinpath('info-crawler-output/')
+    if not path.exists():
+        path.mkdir(parents=True)
     harvest()
 
 
