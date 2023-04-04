@@ -30,14 +30,10 @@ def harvest(domain, output, format, path):
 
     # ==========================================================================================================================================================================================================================
 
-    try:
-        harvester = execute_process(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", "th"], "Gathering information from theHarvester...", subprocess.DEVNULL)
-        emailharvester = execute_process(['python3','../tools/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", "eh", "--noprint"])
-        amass = execute_process(['amass','enum', '-d', domain, "-json", "am.json"], "Gathering information from Amass...", subprocess.DEVNULL)
-    except KeyboardInterrupt:
-        harvester.kill()
-        emailharvester.kill()
-        amass.kill()
+    execute_process(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", "th"],
+                                "Gathering information from theHarvester...", subprocess.DEVNULL)
+    execute_process(['python3','../tools/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", "eh", "--noprint"])
+    execute_process(['../tools/amass/amass','enum', '-d', domain, "-json", "am.json"], "Gathering information from Amass...", subprocess.DEVNULL)
 
     # ==========================================================================================================================================================================================================================
         
