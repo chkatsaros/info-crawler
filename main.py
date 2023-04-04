@@ -24,10 +24,10 @@ def harvest(domain):
     """Harvest and correlate information for penetration testing."""
     try:
         print("Gathering information from theHarvester...")
-        harvester_process = subprocess.Popen(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", "./th"], stdout=subprocess.DEVNULL)
+        harvester_process = subprocess.Popen(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", "th"])
         harvester_process.wait()
         print("Gathering information from EmailHarvester...")
-        emailharvester_process = subprocess.Popen(['python3.8','../tools/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", "./eh"], stdout=subprocess.DEVNULL)
+        emailharvester_process = subprocess.Popen(['python3','../tools/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", "eh"])
         emailharvester_process.wait()  
     except KeyboardInterrupt:
         harvester_process.kill()
