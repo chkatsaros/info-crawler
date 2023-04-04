@@ -1,5 +1,7 @@
 import click
 import subprocess
+from converters.eh_converter import eh_converter
+from converters.th_converter import th_converter
 import pyfiglet
 import time
 from pathlib import Path
@@ -32,20 +34,16 @@ def harvest(domain):
     except KeyboardInterrupt:
         harvester_process.kill()
         emailharvester_process.kill()
-
-    # h8mailProcess = subprocess.Popen(
-    #     ['h8mail', '-t', domain, '--loose'])
-    # try:
-    #     h8mailProcess.wait()
-    # except KeyboardInterrupt:
-    #     h8mailProcess.kill()
+        
+    # Data conversion
+    th_converter('th.json', 'harvester.json')
+    eh_converter('eh.xml', 'emailharvester.json')
 
 # TODO: add --output-path -o click.option for the output
 
 # TODO: add --type -tclick.option for the output type(s)
 
 # TODO: add --tools-path -p click.option for the tools path
-
 
 if __name__ == '__main__':
     logo = pyfiglet.figlet_format("InfoCrawler", font="big")
