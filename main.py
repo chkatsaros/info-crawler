@@ -6,6 +6,8 @@ import pyfiglet
 import time
 from pathlib import Path
 
+available_formats = ['json', 'xml', 'pdf']
+
 def loader(flag):
     animation_sequence = "|/-\\"
     idx = 0
@@ -22,8 +24,13 @@ def loader(flag):
 @click.command()
 @click.option('-d', '--domain', prompt='Domain',
               help='The domain you want to gather information about.')
-def harvest(domain):
+@click.option('-f', '--format', multiple=True, type=click.Choice(available_formats), help='Format of the output')
+@click.option('-o', '--output', help='Path to the output of the execution')
+@click.option('-p', '--path', help='Path to the integrated tools directory')
+
+def harvest(domain, output, format, path):
     """Harvest and correlate information for penetration testing."""
+    print(output,format, path)
     try:
         print("Gathering information from theHarvester...")
         harvester_process = subprocess.Popen(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", "th"])
@@ -39,19 +46,9 @@ def harvest(domain):
     th_converter('th.json', 'harvester.json')
     eh_converter('eh.xml', 'emailharvester.json')
 
-# TODO: add --output-path -o click.option for the output
-
-# TODO: add --type -tclick.option for the output type(s)
-
-# TODO: add --tools-path -p click.option for the tools path
-
 if __name__ == '__main__':
     logo = pyfiglet.figlet_format("InfoCrawler", font="big")
     print(logo)
-
-    path = Path.home().joinpath('info-crawler-output/')
-    if not path.exists():
-        path.mkdir(parents=True)
     harvest()
 
 
