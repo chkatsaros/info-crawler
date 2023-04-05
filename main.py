@@ -44,16 +44,16 @@ def harvest(domain, output, format, path):
     # ==========================================================================================================================================================================================================================
         
     # Data conversion
-    th_converter('th.json', './temp/harvester.json')
-    eh_converter('eh.xml', './temp/emailharvester.json')
-    am_converter('am.json', './temp/amass.json')
+    th_converter('th.json', './temp/harvester')
+    eh_converter('eh.xml', './temp/emailharvester')
+    am_converter('am.json', './temp/amass')
 
     # ==========================================================================================================================================================================================================================
 
     # Invoke output creators
-    for item in available_formats:
-        if item in format: 
-            format_creators[item](domain, output)            
+    for f in available_formats:
+        if f in format: 
+            format_creators[f](domain, output)            
 
     # # Clean up artifacts
     rm_artifacts(artifacts_produced)

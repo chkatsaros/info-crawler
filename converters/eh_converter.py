@@ -9,6 +9,6 @@ def eh_converter(input, output):
         
     json_data = json.dumps(data_dict)
 
-    json_file = open(output, "w") 
+    json_file = open(f'{output}.json', "w") 
     json_file.write(json_data)
     json_file.close()
