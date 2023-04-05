@@ -10,7 +10,6 @@ from creators.json_creator import json_creator
 from creators.xml_creator import xml_creator
 from creators.pdf_creator import pdf_creator
 from helpers.execute_process import execute_process
-from helpers.rm_artifacts import rm_artifacts
 
 available_formats = ['json', 'xml', 'pdf']
 artifacts_produced = ['th.json', 'th.xml', 'eh', 'eh.xml', 'am.json']
@@ -49,14 +48,14 @@ def harvest(domain, output, format, path):
     am_converter('am.json', './temp/amass')
 
     # ==========================================================================================================================================================================================================================
+    
+    for file in artifacts_produced:
+        shutil.move(file, './temp/')
 
     # Invoke output creators
     for f in available_formats:
         if f in format: 
             format_creators[f](domain, output)            
-
-    # # Clean up artifacts
-    rm_artifacts(artifacts_produced)
 
     # Remove temp directory
     if temp_path.exists() and temp_path.is_dir():
