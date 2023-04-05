@@ -33,7 +33,7 @@ def harvest(domain, output, format, path):
     execute_process(['../tools/theHarvester/.venv/bin/python','../tools/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", "th"],
                                 "Gathering information from theHarvester...", subprocess.DEVNULL)
     execute_process(['python3','../tools/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", "eh", "--noprint"])
-    execute_process(['../tools/amass/amass','enum', '-d', domain, "-json", "am.json"], "Gathering information from Amass...", subprocess.DEVNULL)
+    execute_process(['../tools/amass/amass','enum', '-d', domain, "-json", "am.json", "-timeout", "1"], "Gathering information from Amass...", subprocess.DEVNULL)
 
     # ==========================================================================================================================================================================================================================
         
