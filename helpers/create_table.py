@@ -1,5 +1,4 @@
 def create_harvester_table(pdf, data):
-    pdf.add_page()
     pdf.multi_cell(0, 5, f"TheHarvester was also able discovered {len(data['ips'])} IP addresses connected to the specified domain and they are displayed in the following table: ")
     pdf.ln(8)
     

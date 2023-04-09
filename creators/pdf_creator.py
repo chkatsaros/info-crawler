@@ -47,7 +47,7 @@ class PDF(FPDF):
         self.chapter_title(num, title)
         self.chapter_body(name, title, data)  
 
-def pdf_creator(title, path):
+def pdf_creator(title, path, password):
     json_path = Path(path).joinpath(f'{title}.json')
     json_file = json_path.open()
     
@@ -63,6 +63,12 @@ def pdf_creator(title, path):
     for key, value in chapter_title.items():
         pdf.print_chapter(i, value, f'./temp/{key}.txt', data)
         i += 1
+    
+    if password != "":
+        pdf.set_encryption(
+            owner_password=password,
+            user_password=password
+        ) 
     
     pdf.output(f'{path}/{title}.pdf', 'F')
     

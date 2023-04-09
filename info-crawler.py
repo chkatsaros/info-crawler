@@ -26,8 +26,9 @@ format_creators = {
 @click.option('-f', '--format', type=click.Choice(available_formats), multiple=True, help='Format of the output', default=available_formats)
 @click.option('-o', '--output', help='Path to the output of the execution', default='./')
 @click.option('-p', '--path', help='Path to the integrated tools directory', default='../tools')
+@click.option('-e', '--encryption', help='Password to protext produced PDF', default="")
 
-def harvest(domain, output, format, path):
+def harvest(domain, output, format, path, encryption):
     """Harvest and correlate information for penetration testing."""
 
     # Create temp directory
@@ -56,7 +57,10 @@ def harvest(domain, output, format, path):
     # Invoke output creators
     for f in available_formats:
         if f in format: 
-            format_creators[f](domain, output)            
+            if f == 'pdf': 
+                format_creators[f](domain, output, encryption)
+            else:
+                format_creators[f](domain, output)          
 
     # Remove temp directory
     if temp_path.exists() and temp_path.is_dir():
