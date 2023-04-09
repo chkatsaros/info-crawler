@@ -1,4 +1,6 @@
 Click==7.0
+dicttoxml==1.7.16
 fpdf==1.7.2
+fpdf2==2.7.3
 pyfiglet==0.8.post1
 xmltodict==0.13.0
