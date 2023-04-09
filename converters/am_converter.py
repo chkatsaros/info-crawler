@@ -1,16 +1,15 @@
 import json
-import dicttoxml
 
 def am_converter(input, output):
     json_file = open(input)
 
-    data = []
+    amass_dict = { 'Amass': {} }
 
     for line in json_file:
         line_dict = json.loads(line)
-        data.append(line_dict)
-
-    amass_dict = { 'Amass': data }
+        name = line_dict['name']
+        del line_dict['name']
+        amass_dict['Amass'][name] = line_dict
     
     json_file = open(f'{output}.json', "w") 
     json_file.write(json.dumps(amass_dict))

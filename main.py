@@ -3,13 +3,14 @@ import subprocess
 import pyfiglet
 import shutil
 from pathlib import Path
-from converters.am_converter import am_converter
-from converters.eh_converter import eh_converter
-from converters.th_converter import th_converter
-from creators.json_creator import json_creator
-from creators.xml_creator import xml_creator
-from creators.pdf_creator import pdf_creator
-from helpers.execute_process import execute_process
+
+from converters import am_converter
+from converters import eh_converter
+from converters import th_converter
+from creators import json_creator
+from creators import xml_creator
+from creators import pdf_creator
+from helpers import execute_process
 
 available_formats = ['json', 'xml', 'pdf']
 artifacts_produced = ['th.json', 'th.xml', 'eh', 'eh.xml', 'am.json']

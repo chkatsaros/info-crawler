@@ -1,4 +1,14 @@
+import json
 from fpdf import FPDF
+from pathlib import Path
+
+from helpers import create_table, produce_txt
+
+chapter_title = {
+    "harvester": "TheHarvester Results",
+    "emailharvester": "EmailHarvester Results",
+    "amass": "Amass Results"
+}
 
 class PDF(FPDF):
     def header(self):
@@ -17,27 +27,42 @@ class PDF(FPDF):
         self.cell(0, 10, 'Page ' + str(self.page_no()), 0, 0, 'C')
 
     def chapter_title(self, num, label):
-        self.set_font('Times', '', 12)
-        self.set_fill_color(200, 220, 255)
+        self.set_font('Times', 'B', 12)
+        self.set_fill_color(17, 132, 120)
         self.cell(0, 6, '%d. %s' % (num, label), 0, 1, 'L', 1)
         self.ln(4)
 
-    def chapter_body(self, name):
+    def chapter_body(self, name, title, data):
         with open(name, 'rb') as fh:
             txt = fh.read().decode('latin-1')
         self.set_font('Times', '', 12)
         self.multi_cell(0, 5, txt)
+        if chapter_title['harvester'] == title:
+            create_table(self, title, data['TheHarvester'])
+        elif chapter_title['amass'] == title:
+            create_table(self, title, data['Amass'])
 
-    def print_chapter(self, num, title, name):
+    def print_chapter(self, num, title, name, data):
         self.add_page()
         self.chapter_title(num, title)
-        self.chapter_body(name)
+        self.chapter_body(name, title, data)  
 
 def pdf_creator(title, path):
+    json_path = Path(path).joinpath(f'{title}.json')
+    json_file = json_path.open()
+    
+    data = json.load(json_file)
+    
+    produce_txt(data)
+    
     pdf = PDF()
     pdf.set_title(f'InfoCrawler report: {title}')
     pdf.set_author('InfoCrawler')
-    pdf.print_chapter(1, 'TheHarvester Results', f'{title}.json')
-    pdf.print_chapter(2, 'EmailHarvester Results', f'{title}.xml')
-    pdf.print_chapter(3, 'Amass Results', 'test.txt')
+    
+    i = 1
+    for key, value in chapter_title.items():
+        pdf.print_chapter(i, value, f'./temp/{key}.txt', data)
+        i += 1
+    
     pdf.output(f'{path}/{title}.pdf', 'F')
+    
