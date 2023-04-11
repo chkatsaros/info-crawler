@@ -47,7 +47,7 @@ class PDF(FPDF):
         self.chapter_title(num, title)
         self.chapter_body(name, title, data)  
 
-def pdf_creator(title, path, password):
+def pdf_creator(title, path, password = ""):
     json_path = Path(path).joinpath(f'{title}.json')
     json_file = json_path.open()
     

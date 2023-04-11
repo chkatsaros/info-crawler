@@ -1,5 +1,5 @@
 def create_harvester_table(pdf, data):
-    pdf.multi_cell(0, 5, f"TheHarvester was also able discovered {len(data['ips'])} IP addresses connected to the specified domain and they are displayed in the following table: ")
+    pdf.multi_cell(0, 5, f"TheHarvester was also able to discovere {len(data['ips'])} IP addresses connected to the specified domain and they are displayed in the following table: ")
     pdf.ln(8)
     
     pdf.set_font('Times', 'B', 10)
@@ -10,7 +10,7 @@ def create_harvester_table(pdf, data):
     for item in data['ips']:
         ips_table[i].append(item)
         j+=1
-        if (j%5 == 0):
+        if (j%5 == 0 and not len(data['ips']) == j):
             ips_table.append([])
             i+=1
     
