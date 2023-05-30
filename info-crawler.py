@@ -26,7 +26,7 @@ format_creators = {
 @click.option('-f', '--format', type=click.Choice(available_formats), multiple=True, help='Format of the output', default=available_formats)
 @click.option('-o', '--output', help='Path to the output of the execution', default='./')
 @click.option('-p', '--path', help='Path to the integrated tools directory', default='../tools')
-@click.option('-e', '--encryption', help='Password to protext produced PDF', default="")
+@click.option('-e', '--encryption', help='Password to protect produced PDF', default="")
 
 def harvest(domain, output, format, path, encryption):
     """Harvest and correlate information for penetration testing."""
@@ -53,8 +53,9 @@ def harvest(domain, output, format, path, encryption):
     
     for file in artifacts_produced:
         shutil.move(file, './temp/')
-
+    
     # Invoke output creators
+    print('Deleting artifacts...')
     for f in available_formats:
         if f in format: 
             if f == 'pdf': 
