@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import click
 import subprocess
 import pyfiglet
@@ -26,7 +27,7 @@ format_creators = {
 @click.option('-f', '--format', type=click.Choice(available_formats), multiple=True, help='Format of the output', default=available_formats)
 @click.option('-o', '--output', help='Path to the output of the execution', default='./')
 @click.option('-p', '--path', help='Path to the integrated tools directory', default='../tools')
-@click.option('-e', '--encryption', help='Password to protext produced PDF', default="")
+@click.option('-e', '--encryption', help='Password to protect produced PDF', default="")
 
 def harvest(domain, output, format, path, encryption):
     """Harvest and correlate information for penetration testing."""
@@ -37,10 +38,10 @@ def harvest(domain, output, format, path, encryption):
 
     # ==========================================================================================================================================================================================================================
 
-    execute_process([f'{path}/theHarvester/.venv/bin/python',f'{path}/theHarvester/theHarvester.py', '-b', "all", '-d', domain, "-f", "th"],
+    execute_process([f'theHarvester', '-b', "all", '-d', domain, "-f", "th"],
                                 "Gathering information from theHarvester...", subprocess.DEVNULL)
-    execute_process(['python3',f'{path}/EmailHarvester/EmailHarvester.py', '-d', domain, "-s", "eh", "--noprint"])
-    execute_process([f'{path}/amass/amass','enum', '-d', domain, "-json", "am.json", "-timeout", "1"], "Gathering information from Amass...", subprocess.DEVNULL)
+    execute_process([f'emailharvester', '-d', domain, "-s", "eh", "--noprint"])
+    execute_process([f'amass','enum', '-d', domain, "-json", "am.json", "-timeout", "1"], "Gathering information from Amass...", subprocess.DEVNULL)
 
     # ==========================================================================================================================================================================================================================
         
